@@ -106,7 +106,7 @@ static sdfStringList * getParsedLine( FILE *fp, int *indent ) {
                 listEnd->data = (char*)malloc(sizeof(char) * (j - i + 1));
                 memcpy(listEnd->data, lineBuf + i, sizeof(char) * (j - i));
                 listEnd->data[j-i] = '\0';
-                j = i = j + 1;
+                i = j + 1;
             }
         }
         else if( lineBuf[j] == '\n' ) {
@@ -115,7 +115,8 @@ static sdfStringList * getParsedLine( FILE *fp, int *indent ) {
                 if( j - i == 1 && lineBuf[i] == '"' ) {
                     /* If it's nothing but a quote and a newline, skip the newline */
                     getLine(fp);
-                    i = j = 0;
+                    i = 0;
+                    j = -1; /* j will be incremented at the top of the for loop */
                 }
                 else {
                     /* Create buffer for the line */
@@ -131,7 +132,8 @@ static sdfStringList * getParsedLine( FILE *fp, int *indent ) {
                     memcpy(listEnd->data, lineBuf + i, sizeof(char) * (j - i + 1));
                     listEnd->data[j-i+1] = '\0';
                     getLine(fp);
-                    i = j = 0;
+                    i = 0;
+                    j = -1; /* j will be incremented at the top of the for loop */
                 }
             }
             else {
